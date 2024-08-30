@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import passport from "passport";
 import "./strategies/local.js";
+import authRouter from "./routes/auth.js";
 import usersRouter from "./routes/users.js";
 
 const HOST = "127.0.0.1";
@@ -23,15 +24,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
+app.use(authRouter);
 app.use(usersRouter);
-
-app.post("/api/auth", passport.authenticate("local"), (req, res) => {
-	return res.sendStatus(200);
-});
-
-app.get("/api/auth", (req, res) => {
-	return res.send(req.user ?? 401);
-});
 
 app.listen(PORT, HOST, () => {
 	console.log(`Listening on ${HOST}:${PORT}`);
