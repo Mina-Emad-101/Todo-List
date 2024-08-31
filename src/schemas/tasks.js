@@ -24,6 +24,7 @@ export const patchSchema = {
 		optional: true,
 	},
 	done: {
+		optional: true,
 		isBoolean: { errorMessage: "Done field has to be true or false" },
 	},
 	owner_id: {

@@ -1,10 +1,12 @@
 import { Router } from "express";
-import { resolveTaskFromIdx } from "../utils/middlewares.js";
+import { loggedIn, resolveTaskFromIdx } from "../utils/middlewares.js";
 import { validationResult, checkSchema } from "express-validator";
 import { createSchema, patchSchema } from "../schemas/tasks.js";
 import { Task } from "../db/tasks.js";
 
 const router = Router();
+
+router.use(loggedIn);
 
 router.get("/api/tasks", async (req, res) => {
 	return res.send({ data: await Task.find({ owner_id: req.user.id }) });
