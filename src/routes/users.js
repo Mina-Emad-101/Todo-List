@@ -35,7 +35,7 @@ router.post("/api/users", checkSchema(createSchema), async (req, res) => {
 		await user.save();
 	} catch (err) {
 		console.log(err);
-		return res.sendStatus(500);
+		return res.status(500).send({ error: err.errorResponse.errmsg });
 	}
 
 	return res.send(user);
@@ -63,7 +63,11 @@ router.patch(
 			user.password = hashPassword(password);
 		}
 
-		await user.save();
+		try {
+			await user.save();
+		} catch (err) {
+			return res.status(400).send({ error: err });
+		}
 
 		return res.sendStatus(200);
 	},
