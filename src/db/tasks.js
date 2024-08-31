@@ -8,6 +8,10 @@ const tasksSchema = new mongoose.Schema({
 	description: {
 		type: mongoose.Schema.Types.String,
 	},
+	done: {
+		type: mongoose.Schema.Types.Boolean,
+		required: true,
+	},
 	owner_id: {
 		type: mongoose.Schema.Types.String,
 		required: true,

@@ -25,6 +25,7 @@ router.post("/api/tasks", checkSchema(createSchema), async (req, res) => {
 	const task = new Task({
 		title: title,
 		description: description,
+		done: false,
 		owner_id: owner_id,
 	});
 
@@ -49,12 +50,13 @@ router.patch(
 		const task = req.task;
 
 		const {
-			body: { title, description, owner_id },
+			body: { title, description, done, owner_id },
 		} = req;
 
 		if (title) task.title = title;
 		if (description) task.description = description;
 		if (owner_id) task.owner_id = owner_id;
+		if (done) task.done = done;
 
 		await task.save();
 
