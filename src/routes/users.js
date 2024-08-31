@@ -19,7 +19,7 @@ router.get("/api/users/:id", resolveUserFromIdx, (req, res) => {
 
 router.post("/api/users", checkSchema(createSchema), async (req, res) => {
 	const result = validationResult(req);
-	if (!result.isEmpty()) return res.send(result.array());
+	if (!result.isEmpty()) return res.status(400).send(result.array());
 
 	const {
 		body: { username, email, password },
@@ -47,7 +47,7 @@ router.patch(
 	checkSchema(patchSchema),
 	async (req, res) => {
 		const result = validationResult(req);
-		if (!result.isEmpty()) return res.send(result.array());
+		if (!result.isEmpty()) return res.status(400).send(result.array());
 
 		const user = req.resolvedUser;
 

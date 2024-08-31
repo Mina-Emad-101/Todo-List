@@ -18,7 +18,7 @@ router.get("/api/tasks/:id", resolveTaskFromIdx, async (req, res) => {
 
 router.post("/api/tasks", checkSchema(createSchema), async (req, res) => {
 	const result = validationResult(req);
-	if (!result.isEmpty()) return res.send(result.array());
+	if (!result.isEmpty()) return res.status(400).send(result.array());
 
 	const {
 		body: { title, description, owner_id },
@@ -47,7 +47,7 @@ router.patch(
 	resolveTaskFromIdx,
 	async (req, res) => {
 		const result = validationResult(req);
-		if (!result.isEmpty()) return res.send(result.array());
+		if (!result.isEmpty()) return res.status(400).send(result.array());
 
 		const task = req.task;
 
