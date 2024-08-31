@@ -1,5 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
+import { User } from "../db/users.js";
 
 const router = Router();
 

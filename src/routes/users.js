@@ -1,13 +1,13 @@
 import { Router } from "express";
-import mockUsers from "../data/mockUsers.js";
 import { resolveUserFromIdx } from "../middlewares.js";
 import { validationResult, checkSchema } from "express-validator";
 import { createSchema, patchSchema } from "../schemas/users.js";
+import { User } from "../db/users.js";
 
 const router = Router();
 
 router.get("/api/users", (req, res) => {
-	return res.send({ data: mockUsers });
+	return res.send({ data: "" });
 });
 
 router.get("/api/users/:id", resolveUserFromIdx, (req, res) => {
@@ -16,7 +16,7 @@ router.get("/api/users/:id", resolveUserFromIdx, (req, res) => {
 	return res.send(user);
 });
 
-router.post("/api/users", checkSchema(createSchema), (req, res) => {
+router.post("/api/users", checkSchema(createSchema), async (req, res) => {
 	const result = validationResult(req);
 	if (!result.isEmpty()) return res.send(result.array());
 
@@ -24,14 +24,19 @@ router.post("/api/users", checkSchema(createSchema), (req, res) => {
 		body: { username, email, password },
 	} = req;
 
-	const user = {
-		id: mockUsers[mockUsers.length - 1].id + 1,
+	const user = new User({
 		username: username,
 		email: email,
 		password: password,
-	};
+	});
 
-	mockUsers.push(user);
+	try {
+		await user.save();
+	} catch (err) {
+		console.log(err);
+		return res.sendStatus(500);
+	}
+
 	return res.send(user);
 });
 
@@ -62,13 +67,8 @@ router.patch(
 );
 
 router.delete("/api/users/:id", resolveUserFromIdx, (req, res) => {
-	const userIdx = mockUsers.findIndex(
-		(user) => user.id === req.resolvedUser.id,
-	);
-
-	const deletedUser = mockUsers.splice(userIdx, 1)[0];
-
-	return res.send(deletedUser);
+	const user = req.resolvedUser;
+	return res.send(user);
 });
 
 export default router;

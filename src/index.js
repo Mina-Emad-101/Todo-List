@@ -5,11 +5,17 @@ import passport from "passport";
 import "./strategies/local.js";
 import authRouter from "./routes/auth.js";
 import usersRouter from "./routes/users.js";
+import mongoose from "mongoose";
 
 const HOST = "127.0.0.1";
 const PORT = process.env.PORT || 8000;
 
 const app = express();
+
+mongoose
+	.connect("mongodb://127.0.0.1/todolist")
+	.then(() => console.log("connected to DB"))
+	.catch((err) => console.log(err));
 
 // Middlewares
 app.use(express.json());
