@@ -1,4 +1,4 @@
-import { passwordConfirmation } from "../custom-validators.js";
+import { passwordConfirmation } from "../utils/custom-validators.js";
 import { body } from "express-validator";
 
 export const createSchema = {

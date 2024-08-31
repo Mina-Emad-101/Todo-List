@@ -9,7 +9,7 @@ const tasksSchema = new mongoose.Schema({
 		type: mongoose.Schema.Types.String,
 	},
 	owner_id: {
-		type: mongoose.Schema.Types.Number,
+		type: mongoose.Schema.Types.String,
 		required: true,
 	},
 });

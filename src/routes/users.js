@@ -7,8 +7,8 @@ import { hashPassword } from "../utils/hashing.js";
 
 const router = Router();
 
-router.get("/api/users", (req, res) => {
-	return res.send({ data: "" });
+router.get("/api/users", async (req, res) => {
+	return res.send({ data: await User.find() });
 });
 
 router.get("/api/users/:id", resolveUserFromIdx, (req, res) => {
@@ -45,7 +45,7 @@ router.patch(
 	"/api/users/:id",
 	resolveUserFromIdx,
 	checkSchema(patchSchema),
-	(req, res) => {
+	async (req, res) => {
 		const result = validationResult(req);
 		if (!result.isEmpty()) return res.send(result.array());
 
@@ -63,12 +63,17 @@ router.patch(
 			user.password = hashPassword(password);
 		}
 
+		await user.save();
+
 		return res.sendStatus(200);
 	},
 );
 
-router.delete("/api/users/:id", resolveUserFromIdx, (req, res) => {
+router.delete("/api/users/:id", resolveUserFromIdx, async (req, res) => {
 	const user = req.resolvedUser;
+
+	await user.deleteOne();
+
 	return res.send(user);
 });
 
