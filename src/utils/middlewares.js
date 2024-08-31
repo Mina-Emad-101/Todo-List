@@ -1,5 +1,5 @@
-import { Task } from "./db/tasks.js";
-import { User } from "./db/users.js";
+import { Task } from "../db/tasks.js";
+import { User } from "../db/users.js";
 
 export const resolveUserFromIdx = async (req, res, next) => {
 	const id = req.params.id;

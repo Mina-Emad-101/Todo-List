@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { resolveUserFromIdx } from "../middlewares.js";
+import { resolveUserFromIdx } from "../utils/middlewares.js";
 import { validationResult, checkSchema } from "express-validator";
 import { createSchema, patchSchema } from "../schemas/users.js";
 import { User } from "../db/users.js";

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { resolveTaskFromIdx } from "../middlewares.js";
+import { resolveTaskFromIdx } from "../utils/middlewares.js";
 import { validationResult, checkSchema } from "express-validator";
 import { createSchema, patchSchema } from "../schemas/tasks.js";
 import { Task } from "../db/tasks.js";
