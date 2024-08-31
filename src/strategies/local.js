@@ -1,6 +1,8 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
 import { User } from "../db/users.js";
+import { hashPassword } from "../utils/hashing.js";
+import { compareSync } from "bcrypt";
 
 export default passport.use(
 	new Strategy({ usernameField: "email" }, async (email, password, done) => {
@@ -8,7 +10,8 @@ export default passport.use(
 
 		try {
 			if (!user) throw new Error("User Not Found");
-			if (user.password !== password) throw new Error("Incorrect Password");
+			if (!compareSync(password, user.password))
+				throw new Error("Incorrect Password");
 		} catch (err) {
 			done(err, null);
 		}

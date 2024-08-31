@@ -3,6 +3,7 @@ import { resolveUserFromIdx } from "../middlewares.js";
 import { validationResult, checkSchema } from "express-validator";
 import { createSchema, patchSchema } from "../schemas/users.js";
 import { User } from "../db/users.js";
+import { hashPassword } from "../utils/hashing.js";
 
 const router = Router();
 
@@ -27,7 +28,7 @@ router.post("/api/users", checkSchema(createSchema), async (req, res) => {
 	const user = new User({
 		username: username,
 		email: email,
-		password: password,
+		password: hashPassword(password),
 	});
 
 	try {
@@ -59,7 +60,7 @@ router.patch(
 		if (password) {
 			if (!password_confirm) return res.sendStatus(400);
 			if (password !== password_confirm) return res.sendStatus(400);
-			user.password = password;
+			user.password = hashPassword(password);
 		}
 
 		return res.sendStatus(200);
