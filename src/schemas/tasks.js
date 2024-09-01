@@ -16,6 +16,19 @@ export const createSchema = {
 	},
 };
 
+export const putSchema = {
+	title: {
+		notEmpty: { errorMessage: "Title can't be empty" },
+	},
+	description: {
+		optional: true,
+	},
+	done: {
+		notEmpty: { errorMessage: "You must specify whether task is done or not" },
+		isBoolean: { errorMessage: "The Done field must be a boolean" },
+	},
+};
+
 export const patchSchema = {
 	title: {
 		optional: true,

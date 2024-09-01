@@ -8,6 +8,8 @@ export const resolveUserFromIdx = async (req, res, next) => {
 
 	if (!user) return res.sendStatus(404);
 
+	if (user.id !== req.user.id) return res.sendStatus(403);
+
 	req.resolvedUser = user;
 	return next();
 };

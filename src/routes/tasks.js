@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { loggedIn, resolveTaskFromIdx } from "../utils/middlewares.js";
 import { validationResult, checkSchema } from "express-validator";
-import { createSchema, patchSchema } from "../schemas/tasks.js";
+import { createSchema, patchSchema, putSchema } from "../schemas/tasks.js";
 import { Task } from "../db/tasks.js";
 
 const router = Router();
@@ -40,6 +40,34 @@ router.post("/api/tasks", checkSchema(createSchema), async (req, res) => {
 
 	return res.send(task);
 });
+
+router.put(
+	"/api/tasks/:id",
+	checkSchema(putSchema),
+	resolveTaskFromIdx,
+	async (req, res) => {
+		const result = validationResult(req);
+		if (!result.isEmpty()) return res.status(400).send(result.array());
+
+		const {
+			body: { title, description, done },
+		} = req;
+
+		const task = req.task;
+
+		task.title = title;
+		task.description = description;
+		task.done = done;
+
+		try {
+			await task.save();
+		} catch (err) {
+			return res.status(500).send({ error: err });
+		}
+
+		return res.send(task);
+	},
+);
 
 router.patch(
 	"/api/tasks/:id",

@@ -23,6 +23,28 @@ export const createSchema = {
 	},
 };
 
+export const putSchema = {
+	username: {
+		notEmpty: { errorMessage: "Username can't be empty" },
+		isAlphanumeric: { errorMessage: "Username has to be Alphanumeric" },
+	},
+	email: {
+		notEmpty: { errorMessage: "Email can't be empty" },
+		isEmail: { errorMessage: "Email invalid, Email: john@doe.end" },
+	},
+	password: {
+		notEmpty: { errorMessage: "Password can't be empty" },
+		isStrongPassword: { errorMessage: "Password has to be strong" },
+	},
+	password_confirm: {
+		notEmpty: { errorMessage: "Password Confirmation can't be empty" },
+		custom: {
+			options: passwordConfirmation,
+			errorMessage: "Password and Password Confirmation not equal",
+		},
+	},
+};
+
 export const patchSchema = {
 	username: {
 		optional: true,
