@@ -8,8 +8,12 @@ const tasksSchema = new mongoose.Schema({
 	description: {
 		type: mongoose.Schema.Types.String,
 	},
-	done: {
-		type: mongoose.Schema.Types.Boolean,
+	priority: {
+		type: mongoose.Schema.Types.String,
+		required: true,
+	},
+	status: {
+		type: mongoose.Schema.Types.Number,
 		required: true,
 	},
 	owner_id: {

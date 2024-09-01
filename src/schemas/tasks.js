@@ -1,5 +1,3 @@
-import { validateOwnerId } from "../utils/custom-validators.js";
-
 export const createSchema = {
 	title: {
 		notEmpty: { errorMessage: "Title can't be empty" },
@@ -7,11 +5,11 @@ export const createSchema = {
 	description: {
 		optional: true,
 	},
-	owner_id: {
-		notEmpty: { errorMessage: "Owner ID can't be empty" },
-		custom: {
-			options: validateOwnerId,
-			errorMessage: "ID doesn't belong to a User",
+	priority: {
+		notEmpty: { errorMessage: "Priority can't be empty" },
+		isIn: {
+			options: [["high", "medium", "low"]],
+			errorMessage: "Priority must be ( high / medium / low )",
 		},
 	},
 };
@@ -23,9 +21,15 @@ export const putSchema = {
 	description: {
 		optional: true,
 	},
-	done: {
-		notEmpty: { errorMessage: "You must specify whether task is done or not" },
-		isBoolean: { errorMessage: "The Done field must be a boolean" },
+	priority: {
+		notEmpty: { errorMessage: "Priority can't be empty" },
+		isIn: {
+			options: [["high", "medium", "low"]],
+			errorMessage: "Priority must be ( high / medium / low )",
+		},
+	},
+	status: {
+		notEmpty: { errorMessage: "Status can't be empty" },
 	},
 };
 
@@ -36,15 +40,15 @@ export const patchSchema = {
 	description: {
 		optional: true,
 	},
-	done: {
-		optional: true,
-		isBoolean: { errorMessage: "Done field has to be true or false" },
-	},
-	owner_id: {
-		optional: true,
-		custom: {
-			options: validateOwnerId,
-			errorMessage: "ID doesn't belong to a User",
+	priority: {
+		notEmpty: { errorMessage: "Priority can't be empty" },
+		isIn: {
+			options: [["high", "medium", "low"]],
+			errorMessage: "Priority must be ( high / medium / low )",
 		},
+	},
+	status: {
+		optional: true,
+		isNumber: { errorMessage: "Status field must be Number" },
 	},
 };

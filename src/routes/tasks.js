@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { loggedIn, resolveTaskFromIdx } from "../utils/middlewares.js";
-import { validationResult, checkSchema } from "express-validator";
+import { validationResult, checkSchema, body } from "express-validator";
 import { createSchema, patchSchema, putSchema } from "../schemas/tasks.js";
 import { Task } from "../db/tasks.js";
 
@@ -21,14 +21,15 @@ router.post("/api/tasks", checkSchema(createSchema), async (req, res) => {
 	if (!result.isEmpty()) return res.status(400).send(result.array());
 
 	const {
-		body: { title, description, owner_id },
+		body: { title, description, priority },
 	} = req;
 
 	const task = new Task({
 		title: title,
 		description: description,
-		done: false,
-		owner_id: owner_id,
+		priority: priority,
+		status: 1,
+		owner_id: req.user.id,
 	});
 
 	try {
@@ -50,14 +51,15 @@ router.put(
 		if (!result.isEmpty()) return res.status(400).send(result.array());
 
 		const {
-			body: { title, description, done },
+			body: { title, description, priority, status },
 		} = req;
 
 		const task = req.task;
 
 		task.title = title;
 		task.description = description;
-		task.done = done;
+		task.priority = priority;
+		task.status = status;
 
 		try {
 			await task.save();
@@ -65,7 +67,7 @@ router.put(
 			return res.status(500).send({ error: err });
 		}
 
-		return res.send(task);
+		return res.sendStatus(200);
 	},
 );
 
@@ -80,13 +82,14 @@ router.patch(
 		const task = req.task;
 
 		const {
-			body: { title, description, done, owner_id },
+			body: { title, description, priority, status, owner_id },
 		} = req;
 
 		if (title) task.title = title;
 		if (description) task.description = description;
+		if (priority) task.priority = priority;
+		if (status) task.status = status;
 		if (owner_id) task.owner_id = owner_id;
-		if (done) task.done = done;
 
 		await task.save();
 
