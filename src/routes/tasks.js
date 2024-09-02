@@ -21,7 +21,7 @@ router.post("/api/tasks", checkSchema(createSchema), async (req, res) => {
 	if (!result.isEmpty()) return res.status(400).send(result.array());
 
 	const {
-		body: { title, description, priority },
+		body: { title, description, priority, due_date },
 	} = req;
 
 	const task = new Task({
@@ -29,6 +29,8 @@ router.post("/api/tasks", checkSchema(createSchema), async (req, res) => {
 		description: description,
 		priority: priority,
 		status: 1,
+		due_date: due_date,
+		archived: false,
 		owner_id: req.user.id,
 	});
 
@@ -51,7 +53,7 @@ router.put(
 		if (!result.isEmpty()) return res.status(400).send(result.array());
 
 		const {
-			body: { title, description, priority, status },
+			body: { title, description, priority, status, due_date, archived },
 		} = req;
 
 		const task = req.task;
@@ -60,6 +62,8 @@ router.put(
 		task.description = description;
 		task.priority = priority;
 		task.status = status;
+		task.due_date = due_date;
+		task.archived = archived;
 
 		try {
 			await task.save();
@@ -82,14 +86,15 @@ router.patch(
 		const task = req.task;
 
 		const {
-			body: { title, description, priority, status, owner_id },
+			body: { title, description, priority, status, due_date, archived },
 		} = req;
 
 		if (title) task.title = title;
 		if (description) task.description = description;
 		if (priority) task.priority = priority;
 		if (status) task.status = status;
-		if (owner_id) task.owner_id = owner_id;
+		if (due_date) task.due_date = due_date;
+		if (archived) task.archived = archived;
 
 		await task.save();
 
