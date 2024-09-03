@@ -16,7 +16,9 @@ const PORT = process.env.PORT || 8000;
 const app = express();
 
 mongoose
-  .connect("mongodb://127.0.0.1/todolist")
+  .connect(
+    `mongodb+srv://${process.env.DBCREDENTIALS}@cluster0.yjr3f.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`,
+  )
   .then(() => console.log("connected to DB"))
   .catch((err) => console.log(err));
 
