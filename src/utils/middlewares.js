@@ -1,37 +1,42 @@
 import { Task } from "../db/tasks.js";
 import { User } from "../db/users.js";
 
+export const logging = (req, res, next) => {
+  console.log(`${req.method} IP: ${req.ip}`);
+  return next();
+};
+
 export const resolveUserFromIdx = async (req, res, next) => {
-	const id = req.params.id;
+  const id = req.params.id;
 
-	const user = await User.findById(id);
+  const user = await User.findById(id);
 
-	if (!user) return res.sendStatus(404);
+  if (!user) return res.sendStatus(404);
 
-	if (user.id !== req.user.id) return res.sendStatus(403);
+  if (user.id !== req.user.id) return res.sendStatus(403);
 
-	req.resolvedUser = user;
-	return next();
+  req.resolvedUser = user;
+  return next();
 };
 
 export const resolveTaskFromIdx = async (req, res, next) => {
-	const id = req.params.id;
+  const id = req.params.id;
 
-	try {
-		const task = await Task.findById(id);
+  try {
+    const task = await Task.findById(id);
 
-		if (!task) return res.sendStatus(404);
+    if (!task) return res.sendStatus(404);
 
-		if (task.owner_id !== req.user.id) return res.sendStatus(403);
+    if (task.owner_id !== req.user.id) return res.sendStatus(403);
 
-		req.task = task;
-		return next();
-	} catch (err) {
-		return res.status(400).send({ error: err.message });
-	}
+    req.task = task;
+    return next();
+  } catch (err) {
+    return res.status(400).send({ error: err.message });
+  }
 };
 
 export const loggedIn = (req, res, next) => {
-	if (!req.user) return res.sendStatus(401);
-	return next();
+  if (!req.user) return res.sendStatus(401);
+  return next();
 };
