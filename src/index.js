@@ -11,10 +11,7 @@ import MongoStore from "connect-mongo";
 import { logging } from "./utils/middlewares.js";
 import "dotenv/config";
 
-configDotenv();
-
-const HOST = "127.0.0.1";
-import { configDotenv } from "dotenv";
+const HOST = process.env.HOST || "127.0.0.1";
 const PORT = process.env.PORT || 8000;
 
 const app = express();
