@@ -9,15 +9,19 @@ import tasksRouter from "./routes/tasks.js";
 import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
 import { logging } from "./utils/middlewares.js";
+import "dotenv/config";
+
+configDotenv();
 
 const HOST = "127.0.0.1";
+import { configDotenv } from "dotenv";
 const PORT = process.env.PORT || 8000;
 
 const app = express();
 
 mongoose
   .connect(
-    `mongodb+srv://${process.env.DBCREDENTIALS}@cluster0.yjr3f.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`,
+    `mongodb+srv://mina:${process.env.DBPASSWORD}@cluster0.yjr3f.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`,
   )
   .then(() => console.log("connected to DB"))
   .catch((err) => console.log(err));
