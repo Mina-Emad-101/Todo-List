@@ -5,7 +5,7 @@ import { loggedIn } from "../utils/middlewares.js";
 const router = Router();
 
 router.post("/api/auth", passport.authenticate("local"), (req, res) => {
-	return res.send({ id: req.user.id });
+	return res.send({ id: req.user });
 });
 
 // All next routes need authentication
