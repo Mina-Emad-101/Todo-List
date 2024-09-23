@@ -11,6 +11,7 @@ export default passport.use(
     try {
       if (!user) throw new Error("User Not Found");
       console.log(user);
+      console.log(password);
       if (!compareSync(password, user.password))
         throw new Error("Incorrect Password");
     } catch (err) {
