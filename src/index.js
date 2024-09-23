@@ -10,6 +10,7 @@ import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
 import { logging } from "./utils/middlewares.js";
 import "dotenv/config";
+import cors from "cors";
 
 const HOST = process.env.HOST || "127.0.0.1";
 const PORT = process.env.PORT || 8000;
@@ -39,6 +40,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(cors());
 app.use(logging);
 
 // Routes
