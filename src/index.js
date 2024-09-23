@@ -19,7 +19,7 @@ const app = express();
 
 mongoose
   .connect(
-    `mongodb+srv://mina:${process.env.DBPASSWORD}@cluster0.yjr3f.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`,
+    `mongodb+srv://mina:${process.env.DBPASSWORD}@cluster0.yjr3f.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0&authSource=todo`,
   )
   .then(() => console.log("connected to DB"))
   .catch((err) => console.log(err));
