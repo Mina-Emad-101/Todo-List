@@ -51,7 +51,7 @@ router.put("/api/users", loggedIn, checkSchema(putSchema), async (req, res) => {
 
   user.username = username;
   user.email = email;
-  user.password = password;
+  user.password = hashPassword(password);
 
   try {
     await user.save();

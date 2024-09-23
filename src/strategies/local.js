@@ -1,7 +1,6 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
 import { User } from "../db/users.js";
-import { hashPassword } from "../utils/hashing.js";
 import { compareSync } from "bcrypt";
 
 export default passport.use(
