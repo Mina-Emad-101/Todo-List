@@ -8,102 +8,102 @@ import { hashPassword } from "../utils/hashing.js";
 const router = Router();
 
 router.post("/api/users", checkSchema(createSchema), async (req, res) => {
-	const result = validationResult(req);
-	if (!result.isEmpty()) return res.status(400).send(result.array());
+  const result = validationResult(req);
+  if (!result.isEmpty()) return res.status(400).send(result.array());
 
-	const {
-		body: { username, email, password },
-	} = req;
+  const {
+    body: { username, email, password },
+  } = req;
 
-	const user = new User({
-		username: username,
-		email: email,
-		password: hashPassword(password),
-	});
+  const user = new User({
+    username: username,
+    email: email,
+    password: hashPassword(password),
+  });
 
-	try {
-		await user.save();
-	} catch (err) {
-		console.log(err);
-		return res.status(500).send({ error: err.errorResponse.errmsg });
-	}
+  try {
+    await user.save();
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send({ error: err.errorResponse.errmsg });
+  }
 
-	return res.send(user);
+  return res.send({ id: user.id });
 });
 
 // All next routes must be logged in
 
 router.get("/api/users", loggedIn, (req, res) => {
-	const user = req.user;
+  const user = req.user;
 
-	return res.send(user);
+  return res.send(user);
 });
 
 router.put("/api/users", loggedIn, checkSchema(putSchema), async (req, res) => {
-	const result = validationResult(req);
-	if (!result.isEmpty()) return res.status(400).send(result.array());
+  const result = validationResult(req);
+  if (!result.isEmpty()) return res.status(400).send(result.array());
 
-	const {
-		body: { username, email, password },
-	} = req;
+  const {
+    body: { username, email, password },
+  } = req;
 
-	const user = req.user;
+  const user = req.user;
 
-	user.username = username;
-	user.email = email;
-	user.password = password;
+  user.username = username;
+  user.email = email;
+  user.password = password;
 
-	try {
-		await user.save();
-	} catch (err) {
-		console.log(err);
-		return res.status(500).send({ error: err.errorResponse.errmsg });
-	}
+  try {
+    await user.save();
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send({ error: err.errorResponse.errmsg });
+  }
 
-	return res.sendStatus(200);
+  return res.sendStatus(200);
 });
 
 router.patch(
-	"/api/users",
-	loggedIn,
-	checkSchema(patchSchema),
-	async (req, res) => {
-		const result = validationResult(req);
-		if (!result.isEmpty()) return res.status(400).send(result.array());
+  "/api/users",
+  loggedIn,
+  checkSchema(patchSchema),
+  async (req, res) => {
+    const result = validationResult(req);
+    if (!result.isEmpty()) return res.status(400).send(result.array());
 
-		const user = req.user;
+    const user = req.user;
 
-		const {
-			body: { username, email, password, password_confirm },
-		} = req;
+    const {
+      body: { username, email, password, password_confirm },
+    } = req;
 
-		if (username) user.username = username;
-		if (email) user.email = email;
-		if (password) {
-			if (!password_confirm) return res.sendStatus(400);
-			if (password !== password_confirm) return res.sendStatus(400);
-			user.password = hashPassword(password);
-		}
+    if (username) user.username = username;
+    if (email) user.email = email;
+    if (password) {
+      if (!password_confirm) return res.sendStatus(400);
+      if (password !== password_confirm) return res.sendStatus(400);
+      user.password = hashPassword(password);
+    }
 
-		try {
-			await user.save();
-		} catch (err) {
-			return res.status(400).send({ error: err });
-		}
+    try {
+      await user.save();
+    } catch (err) {
+      return res.status(400).send({ error: err });
+    }
 
-		return res.sendStatus(200);
-	},
+    return res.sendStatus(200);
+  },
 );
 
 router.delete("/api/users", loggedIn, async (req, res) => {
-	const user = req.user;
+  const user = req.user;
 
-	await user.deleteOne();
+  await user.deleteOne();
 
-	req.session.destroy((err) => {
-		if (err) return res.status(500).send({ error: err });
-	});
-	return res.send(user);
+  req.session.destroy((err) => {
+    if (err) return res.status(500).send({ error: err });
+  });
+  return res.send(user);
 });
 
 export default router;
